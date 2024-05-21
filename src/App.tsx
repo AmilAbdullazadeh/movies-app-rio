@@ -6,6 +6,7 @@ import {API_KEY_PARAM, BACKDROP_BASE_URL, BASE_URL} from "./config.ts";
 import {useEffect, useState} from "react";
 import {ITvShowItem} from "./models/tvShowItem.ts";
 import {TVShowDetail} from "./components/TVShowDetail/TVShowDetail.tsx";
+import {TVShowList} from "./components/TVShowList/TVShowList.tsx";
 
 // https://api.themoviedb.org/3/tv/popular
 
@@ -26,7 +27,7 @@ export function App() {
         vote_average: 0,
         vote_count: 0
     });
-    // const [tvShowRecommendations, setTVShowRecommendations] = useState([]);
+    const [tvShowRecommendations, setTVShowRecommendations] = useState<ITvShowItem[]>([]);
 
     //! fetchData function to fetch popular TV shows
     async function fetchData() {
@@ -38,21 +39,32 @@ export function App() {
         }
     }
 
-   useEffect(() => {
-         fetchData();
-   }, [])
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    useEffect(() => {
+        if (currentTVShow.id !== 0 && currentTVShow.id) {
+            fetchRecommendations(currentTVShow.id);
+        }
+    }, [currentTVShow]);
 
     //! fetchRecommendations function to fetch recommendations for a TV show
+    async function fetchRecommendations(id: number) {
+        try {
+            const response = await axios.get(`${BASE_URL}tv/${id}/recommendations?api_key=${API_KEY_PARAM}`);
+            setTVShowRecommendations(response.data.results.slice(0, 10));
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     //! fetchByTitle function to search for a TV show by title
 
     //! updateCurrentTVShow for the TVShowDetail component
-
-    //! fetch with lifecycle methods for initial data
-
-    //! fetch with lifecycle methods for recommendations
-
-
+    function updateCurrentTVShow(tvShow: ITvShowItem) {
+        setCurrentTVShow(tvShow);
+    }
 
     return (
         <div
@@ -84,7 +96,11 @@ export function App() {
                 }
             </div>
             <div className={s.recommended_shows}>
-                {/*TVShowList*/}
+                {
+                    tvShowRecommendations.length > 0 && (
+                        <TVShowList tvShowList={tvShowRecommendations} onClickItem={updateCurrentTVShow} />
+                    )
+                }
             </div>
         </div>
     );
