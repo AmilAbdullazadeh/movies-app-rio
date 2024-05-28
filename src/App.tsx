@@ -1,8 +1,16 @@
-import Home from "./pages/Home";
-import {Note} from "./pages/Note/Note.tsx";
+import {Header} from "./components/Header/Header.tsx";
+import {Footer} from "./components/Footer/Footer.tsx";
+import {Outlet} from "react-router-dom";
+
 
 export function App() {
     return (
-        <Note />
+        <>
+            <Header/>
+            <div style={{ padding: 50 }} >
+                <Outlet />
+            </div>
+            <Footer/>
+        </>
     );
 }

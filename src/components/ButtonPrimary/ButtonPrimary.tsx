@@ -1,5 +1,12 @@
 import s from "./style.module.css";
-export function ButtonPrimary({onClick, isDisabled, children}) {
+
+interface ButtonPrimaryProps {
+    onClick: () => void;
+    isDisabled?: boolean;
+    children: React.ReactNode;
+}
+
+export function ButtonPrimary({onClick, isDisabled = false, children}: ButtonPrimaryProps) {
   return (
     <button
       disabled={isDisabled}
@@ -7,7 +14,7 @@ export function ButtonPrimary({onClick, isDisabled, children}) {
       type="button"
       className={`btn btn-primary ${s.button}`}
     >
-      {children}
+        {children}
     </button>
   );
 }

@@ -1,8 +1,10 @@
-import React from 'react'
 import s from "./style.module.css"
 
-export function FieldError({msg}) {
+export function FieldError(props) {
+  // msg
   return (
-    <div className={s.container} >{ msg }</div>
+    <div className={s.container} >
+    {/*  */}
+    </div>
   )
 }

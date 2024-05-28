@@ -1,11 +1,10 @@
-import logoSrc from "assets/images/logo.png";
+import logoSrc from "../../assets/images/logo.png"
 import { useNavigate } from "react-router-dom";
 import s from "./style.module.css";
 import {Logo} from "../Logo/Logo.tsx";
 import {ButtonPrimary} from "../ButtonPrimary/ButtonPrimary.tsx";
-// import { useNavigate } from "react-router-dom";
 
-export function Header(props) {
+export function Header() {
   const navigate = useNavigate()
   return (
     <div className={`row ${s.container}`}>

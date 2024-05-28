@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {Link, redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchAll} from "../../store/notes/notes-slice";
 import {SearchBar} from "../../components/SearchBar/SearchBar.tsx";
