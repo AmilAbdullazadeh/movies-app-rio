@@ -1,28 +1,41 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { PencilFill, TrashFill } from "react-bootstrap-icons";
 import s from "./style.module.css";
 import {FieldError} from "../FieldError/FieldError.tsx";
 import {ButtonPrimary} from "../ButtonPrimary/ButtonPrimary.tsx";
 import {Simulate} from "react-dom/test-utils";
 import submit = Simulate.submit;
+import {ValidatorService} from "../../services/validator.ts";
+import {hasError, validate} from "../../utils/helpers";
 
 interface NoteFormProps {
     onSubmit: () => void;
     title: string;
+    isEditable?: boolean;
+    note: {
+        title: string,
+        content: string,
+    },
+    onClickEdit: () => void;
+    onClickDelete: () => void;
 }
 
-// const VALIDATION_RULES
+export function NoteForm({ onSubmit, title, isEditable = true, note, onClickEdit, onClickDelete }: NoteFormProps) {
 
-export function NoteForm({ onSubmit, title }: NoteFormProps) {
-    // isEditable = true,
-    //     note,
-    //     onClickEdit,
-    //     onClickDelete,
+    console.log(note);
 
     const [isSubmit, setIsSubmit] = useState(false);
     const [formValues, setFormValues] = useState({ title: "", content: "" });
     const [formErrors, setFormErrors] = useState({ title: "", content: "" });
 
+    useEffect(() => {
+        if (note) {
+            setFormValues({
+                title: note.title,
+                content: note.content,
+            });
+        }
+    }, [note]);
 
     const updateFormValues = (e: Event) => {
         const {name, value} = e.target;
@@ -32,15 +45,17 @@ export function NoteForm({ onSubmit, title }: NoteFormProps) {
         });
     }
 
-  // const hasError action
-
-    // const validate action
-
     const handleSubmit = (e: Event) => {
         e.preventDefault();
         setIsSubmit(true);
-        // validate
-        // if no errors
+
+        Object.entries(formValues).forEach(([fieldName, fieldValue]) => {
+            validate(fieldName, fieldValue, setFormErrors, formErrors)
+        });
+        if (hasError(formErrors)) {
+            return;
+        }
+
         onSubmit(formValues);
     }
 
@@ -49,13 +64,13 @@ export function NoteForm({ onSubmit, title }: NoteFormProps) {
       <div className="col-6 cursor-pointer" style={{ cursor: 'pointer' }}  >
         <PencilFill
           className={s.action_icon}
-          // onClick={}
+          onClick={onClickEdit}
         />
       </div>
       <div className="col-6 cursor-pointer" style={{ cursor: 'pointer' }} >
         <TrashFill
           className={s.action_icon}
-          // onClick={}
+          onClick={onClickDelete}
         />
       </div>
     </>
@@ -65,12 +80,13 @@ export function NoteForm({ onSubmit, title }: NoteFormProps) {
     <div className="mb-5">
       <label className="form-label">Title</label>
       <input
+        value={formValues.title}
         type="text"
         name="title"
         className="form-control"
         onChange={updateFormValues}
       />
-        {/*FieldError*/}
+        <FieldError msg={formErrors.title} />
     </div>
   );
 
@@ -78,13 +94,14 @@ export function NoteForm({ onSubmit, title }: NoteFormProps) {
     <div className="mb-5">
       <label className="form-label">Content</label>
       <textarea
+        value={formValues.content}
         type="text"
         name="content"
         className="form-control"
         onChange={updateFormValues}
         row="5"
       />
-        {/*FieldError*/}
+        <FieldError msg={formErrors.content} />
     </div>
   );
 

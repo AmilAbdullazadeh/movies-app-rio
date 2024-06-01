@@ -13,8 +13,9 @@ export function NoteCreate() {
     const navigate = useNavigate();
 
     const submit = (formValues: ISubmitData) => {
-        dispatch(createNote(formValues));
-        navigate('/');
+        dispatch(createNote(formValues)).then(() => {
+            navigate('/');
+        })
     }
 
   return (

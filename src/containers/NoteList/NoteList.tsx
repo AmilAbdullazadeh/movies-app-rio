@@ -2,7 +2,8 @@ import s from "./style.module.css";
 import {TextCard} from "../../components/TextEditor/TextEditor.tsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {deleteNote} from "../../store/notes/notes-slice.ts";
+import {deleteNote, deleteNoteRed, fetchAll} from "../../store/notes/notes-slice.ts";
+import {useEffect, useState} from "react";
 
 interface NoteListProps {
     noteList: [
@@ -26,6 +27,7 @@ export function NoteList({noteList}: NoteListProps) {
     const handleClickTrash = (id: number) => {
         // @ts-ignore
         dispatch(deleteNote(id));
+        dispatch(deleteNoteRed(id));
     }
 
   return (

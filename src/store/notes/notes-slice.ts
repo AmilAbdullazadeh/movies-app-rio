@@ -33,10 +33,22 @@ const createNote = createAsyncThunk(
     },
 )
 
+const updateNote = createAsyncThunk(
+    'notes/updateNote',
+    async (note) => {
+        const response = await axios.put(`${BASE_URL}/notes/${note.id}`, note)
+        return response.data
+    },
+)
+
 export const noteSlice = createSlice({
     name: 'notes',
     initialState: notesInitialState,
-    reducers: {},
+    reducers: {
+        deleteNoteRed: (state, action) => {
+            state.notes = state.notes.filter(note => note.id !== action.payload)
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchAll.pending, (state) => {
             state.status = 'loading'
@@ -76,5 +88,6 @@ export const noteSlice = createSlice({
 
 
 // export actions and reducer
-export {fetchAll, deleteNote, createNote}
+export {fetchAll, deleteNote, createNote, updateNote}
+export const {deleteNoteRed} = noteSlice.actions
 export const noteReducer = noteSlice.reducer
