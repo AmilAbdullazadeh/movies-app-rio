@@ -10,7 +10,7 @@ interface NoteListProps {
         {
             id: number,
             title: string,
-            subtitle: string,
+            subtitle?: string,
             content: string,
         }
     ];
@@ -38,7 +38,7 @@ export function NoteList({noteList}: NoteListProps) {
                     <TextCard
                         key={note.id}
                         title={note.title}
-                        subtitle={note.subtitle}
+                        subtitle={note?.subtitle}
                         content={note.content}
                         onClick={() => handleClick(note.id)}
                         onClickTrash={() => handleClickTrash(note.id)}

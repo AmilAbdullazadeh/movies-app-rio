@@ -5,20 +5,32 @@ import {fetchAll} from "../../store/notes/notes-slice";
 import {SearchBar} from "../../components/SearchBar/SearchBar.tsx";
 import {NoteList} from "../../containers/NoteList/NoteList.tsx";
 
+interface INoteBrowse {
+    id: number,
+    title: string,
+    subtitle?: string,
+    content: string,
+}
+
 export function NoteBrowse(props) {
-    // searchTerm
+    const [searchTerm, setSearchTerm] = useState("");
     const notes = useSelector((state) => state.notes.notes);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchAll());
-    }, []);
+    }, [dispatch]);
 
-    // filterNotes action
+    const filterNotes = notes.filter((note: INoteBrowse) => {
+        const title = note.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const content = note.content.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // handleSearch action
+        return title || content;
+    })
 
-    console.log(notes);
+    const handleSearch = (text: string) => {
+        setSearchTerm(text);
+    }
 
     return (
         <>
@@ -34,10 +46,10 @@ export function NoteBrowse(props) {
                     <>
                         <div className="row justify-content-center mb-5">
                             <div className="col-sm-12 col-md-4">
-                                {/*SearchBar*/}
+                                <SearchBar onTextChange={handleSearch} placeholder='Search ...' />
                             </div>
                         </div>
-                        { notes && <NoteList noteList={notes} /> }
+                        { notes && <NoteList noteList={filterNotes} /> }
                     </>
                 )
             }
