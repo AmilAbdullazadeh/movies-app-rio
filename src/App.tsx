@@ -1,16 +1,21 @@
-import {Header} from "./components/Header/Header.tsx";
-import {Footer} from "./components/Footer/Footer.tsx";
-import {Outlet} from "react-router-dom";
+import Level1 from "./pages/Levels/Level1.tsx";
+import {THEME, ThemeContext} from "./contexts/ThemeContext.ts";
+import {useContext, useState} from "react";
 
 
 export function App() {
+    const initialTheme = useContext(ThemeContext)
+    const [theme, setTheme] = useState(initialTheme)
     return (
-        <>
-            <Header/>
-            <div style={{ padding: 50 }} >
-                <Outlet />
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+            <div style={{
+                color: THEME[theme].textColor,
+                backgroundColor: THEME[theme].backgroundColor,
+                height: '100vh',
+                padding: 50
+            }}>
+                <Level1/>
             </div>
-            <Footer/>
-        </>
+        </ThemeContext.Provider>
     );
 }

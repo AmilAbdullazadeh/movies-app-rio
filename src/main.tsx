@@ -25,7 +25,6 @@ ReactDOM.createRoot(rootElement!).render(
             <Router>
                 <Routes>
                     <Route exact path="/" element={<App/>}>
-                        <Route path="/" element={<NoteBrowse/>}/>
                         <Route path="/notes/new" element={<NoteCreate/>}/>
                         <Route path="/notes/:id" element={<Note/>}/>
                         <Route path="*" element={<PageNotFound/>}/>
